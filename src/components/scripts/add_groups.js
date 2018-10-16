@@ -45,7 +45,7 @@ function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
       userFullName.value = fullName;
       const userPhoneNum = document.querySelector('#user_phone_num');
       userPhoneNum.value = phone;
-
+      // Устанавливаем актуальную группу контакта.
       const choseGroupBurger = document.querySelector(`#choseGroupBurger [value="${this.closest('.accordion-item').getAttribute('data-cb-group-id')}"]`);
       if (choseGroupBurger !== null) {
         choseGroupBurger.selected = true;
@@ -174,13 +174,17 @@ function addGroupItemToBurger(groupName, groupId) {
   });
 }
 
-function createOptions(groupName, groupId) {
+function createOption(groupName, groupId) {
   const opt = document.createElement('option');
   opt.textContent = groupName;
   opt.setAttribute('value', groupId);
   return opt;
 }
-
+function addOptionToContactForm(groupName, groupId) {
+  // Не стоит добавлять дефолтный пустой опшн.
+  if (groupName === 'without_group') return;
+  document.querySelector('#choseGroupBurger').append(createOption(groupName, groupId));
+}
 function addGroupItem() {
   // Забираем данные из формы.
   const formDataGroupItem = new FormData(addGroupForm);
@@ -203,8 +207,7 @@ function addGroupItem() {
     // Дорисовываем пункты групп в групп-бургер.
     addGroupItemToBurger(groupName, newId);
     // добавляем опшн в контакт-бургер.
-    if (groupName == 'without_group') return;
-    document.querySelector('#choseGroupBurger').append(createOptions(groupName, newId));
+    addOptionToContactForm(groupName, newId);
   }
 }
 
@@ -251,7 +254,7 @@ function getDataFromLocalStorage() {
         // Добавляем в селект в бургере новые опшны.
         if (contactBook.groups[groupId].groupName !== undefined
           && contactBook.groups[groupId].groupName !== null) {
-          document.querySelector('#choseGroupBurger').append(createOptions(contactBook.groups[groupId].groupName, groupId));
+          addOptionToContactForm(contactBook.groups[groupId].groupName, groupId);
         }
       }
     }
