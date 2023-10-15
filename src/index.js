@@ -1,8 +1,15 @@
 // css
-import "./components/css/style.css";
+import './components/css/reset.css';
 // scss
-import "./components/scss/main.scss";
-import "./components/scss/fonts.scss";
-
+import './components/scss/main.scss';
+import './components/scss/fonts.scss';
+import './components/scss/global.scss';
+// bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 // scripts
-import "./components/scripts/main";
+import './components/scripts/main';
+import './components/scripts/phone_mask';
+import './components/scripts/toasts_elements';
+import './components/scripts/offcanvas_elements';
+import './components/scripts/add_groups';
+import './components/scripts/add_contacts';

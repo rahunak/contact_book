@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const autoprefixer = require("autoprefixer");
 
 module.exports = {
   entry: "./src/index.js",
@@ -36,14 +37,19 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
       },
+      // По каким то причинам autoprefixer вызывает ошибки при компиляции.
+      // Ошибки связаны с 5-й версией бутстрапа.
+      // {
+      //   // Loader for webpack to process CSS with PostCSS
+      //   loader: "postcss-loader",
+      //   options: {
+      //     postcssOptions: {
+      //       plugins: [autoprefixer],
+      //     },
+      //   },
+      // },
     ],
   },
-  // исходник
-  //   new HtmlWebpackPlugin({
-  //     title: 'webpack Boilerplate',
-  //     template: path.resolve(__dirname, './src/index.html'), // шаблон
-  //     filename: 'index.html', // название выходного файла
-  // }),
 
   plugins: [
     new HtmlWebpackPlugin({

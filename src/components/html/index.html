@@ -1,10 +1,246 @@
-<html>
-  <head>
-    <title>Example</title>
-  </head>
-  <body>
-    <main class="hello">
-    Hello Developer!
-    </main>
-  </body>
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Contact Book</title>
+    </head>
+    <body>
+        <div class="container-fluid ">
+            <div class="container-fluid">
+                <div class="container">
+                    <header class="header d-flex justify-content-between align-items-center">
+                        <div class="logo--wrapper d-flex align-items-center justify-content-between gap-3">
+                            <img src="../images/svg/contact-book.svg" alt="" class="contact-book--svg">
+                            <h1 class="logo--text m-0">Книга контактов</h1>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center gap-3 action-buttons">
+                            <button
+                                class="d-flex justify-content-center align-items-center gap-3 button button--red"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasScrollingContacts"
+                                aria-controls="offcanvasScrollingContacts"
+                            >
+                                Добавить контакт
+                                <img src="../images/svg/plus.svg" alt="">
+                            </button>
+                            <button
+                                class="d-flex justify-content-center align-items-center button button--blue"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasScrollingGroup"
+                                aria-controls="offcanvasScrollingGroup"
+                            >Группы</button>
+                        </div>
+                    </header>
+                </div>
+            </div>
+            <div class="container-fluid bg-gray container-wrapper">
+                <div class="container ">
+                    <main class="main">
+                        <p class="default-result-text">Список контактов пуст</p>
+                        <!-- Group Accordeons -->
+                        <div class="accordion accordion-flush" id="accordionContactsGroup">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button
+                                        class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne"
+                                        aria-expanded="false"
+                                        aria-controls="flush-collapseOne"
+                                    >
+                                        Accordion Item #1
+                                    </button>
+                                </h2>
+                                <div
+                                    id="flush-collapseOne"
+                                    class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingOne"
+                                    data-bs-parent="#accordionFlushExample"
+                                >
+                                    <div class="accordion-body">
+                                        Placeholder content for this accordion, which is intended to demonstrate the
+                                        <code>.accordion-flush</code>
+                                        class. This is the first item's accordion body.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Group Accordeons end.-->
+                    </main>
+                    <!--  first -->
+                    <div
+                        class="offcanvas offcanvas-start"
+                        data-bs-scroll="true"
+                        tabindex="-1"
+                        id="offcanvasScrollingContacts"
+                        aria-labelledby="offcanvasScrollingLabel"
+                    >
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Добавление контакта</h5>
+                            <button
+                                type="button"
+                                class="btn-close text-reset"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <!-- First offcanvas. -->
+                        <div class="offcanvas-body">
+                            <form id="createContactForm" class="h-100 d-flex flex-column justify-content-between add-contact-form">
+                                <div>
+                                    <!-- First name and Sure name. -->
+                                    <div class=" mb-3">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="user_full_name"
+                                            placeholder="Введите ФИО"
+                                            name="user_full_name"
+                                        >
+                                    </div>
+                                    <!-- Phone. -->
+                                    <div class=" mb-3">
+                                        <input
+                                            type="tel"
+                                            id="user_phone_num"
+                                            name="user_phone_num"
+                                            pattern="\+7 \(\d{3}\) \d{3} \d{4}"
+                                            class="form-control"
+                                            placeholder="Введите номер"
+                                        >
+                                    </div>
+                                    <!-- Goup select. -->
+                                    <select id="choseGroupBurger" name="affiliation_user_group" class="form-select  mb-3" aria-label="выберите группу">
+                                        <option selected>Выберите группу</option>
+                                    </select>
+                                </div>
+                                <!-- Controls. -->
+                                <div class="controls align-self-end d-flex justify-content-center align-items-center gap-3">
+                                    <button type="submit" class="button button--blue">Сохранить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Second offcanvas. -->
+                    <div
+                        class="offcanvas offcanvas-start"
+                        data-bs-scroll="true"
+                        tabindex="-1"
+                        id="offcanvasScrollingGroup"
+                        aria-labelledby="offcanvasScrollingLabel"
+                    >
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Группы контактов</h5>
+                            <button
+                                type="button"
+                                class="btn-close text-reset"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="offcanvas-body d-flex flex-column gap-3">
+                            <div class="groups d-flex flex-column gap-3"></div>
+                            <!-- Group Form -->
+                            <form id="addGroupForm" class="h-100 d-flex flex-column justify-content-between">
+                                <div id="addGroupInputWrapper" class="mb-3 d-flex justify-content-between align-items-center gap-3 invisible">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="addGroupInput"
+                                        name="group_name"
+                                        placeholder="Введите название"
+                                        aria-describedby="Введите название группы"
+                                    >
+                                    <svg class="trashcan---wrapper">
+                                        <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
+                                    </svg>
+                                </div>
+                                <div class="controls align-self-end d-flex justify-content-center align-items-center gap-3">
+                                    <button id="addGroupButton" type="button" class="button button--transparent text-blue">Добавить</button>
+                                    <button type="submit" class="button button--blue">Сохранить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- end -->
+                </div>
+            </div>
+        </div>
+        <!-- Toast -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+            <div
+                id="errorToastAddContact"
+                class="toast hide"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+            >
+                <div class="toast-header">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small>11 mins ago</small>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="toast-body">
+                    <p id="fullNameError" class="d-none">Не указаны ФИО контакта</p>
+                    <p id="numError" class="d-none">Не правильно введен номер контакта</p>
+                </div>
+            </div>
+        </div>
+        <template id="groupItemTemplate">
+            <div class="group d-flex gap-3 justify-content-center align-items-center">
+                <input
+                    id="newGroup"
+                    class="form-control"
+                    type="text"
+                    value="{{имя группы}}"
+                    aria-label="{{имя группы}}"
+                    disabled
+                    readonly
+                >
+                <svg data-cb-target="idGoupForRemoving" class="trashcan---wrapper">
+                    <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
+                </svg>
+            </div>
+        </template>
+        <template id="newAccordionGroup" class="newAccordionGroup">
+                <div class="accordion accordion-flush" id="accordionGroup__name">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseOne"
+                                aria-expanded="false"
+                                aria-controls="flush-collapseOne"
+                            >
+                                Accordion Item #1
+                            </button>
+                        </h2>
+                        <div
+                            id="flush-collapseOne"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="flush-headingOne"
+                            data-bs-parent="#accordionFlushExample"
+                        >
+                            <div class="accordion-body">
+                                Placeholder content for this accordion, which is intended to demonstrate the
+                                <code>.accordion-flush</code>
+                                class. This is the first item's accordion body.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </template>
+    </body>
 </html>
