@@ -10,6 +10,5 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './components/scripts/main';
 import './components/scripts/phone_mask';
 import './components/scripts/toasts_elements';
-import './components/scripts/offcanvas_elements';
 import './components/scripts/add_groups';
-import './components/scripts/add_contacts';
+import './components/scripts/actions_localStorage';

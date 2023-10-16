@@ -34,17 +34,18 @@ window.addEventListener('DOMContentLoaded', () => {
         /_+/g,
         (a) => `\\d{1,${a.length}}`,
       ).replace(/[+()]/g, '\\$&');
-
+      // Изменяем regExp в соответствии с тем что было введено.
       reg = new RegExp(`^${reg}$`);
 
       let keyCode = null;
       if (event.hasOwnProperty('keyCode')) {
         keyCode = event.keyCode;
       }
-
+      // Проверяем все вышестоящие условия + то что пользователь вводит цифры с клавы.
       if (!reg.test(this.value) || this.value.length < 5 || event.hasOwnProperty('keyCode') && keyCode > 47 && keyCode < 58) {
         this.value = new_value;
       }
+      // Если пользователь не ввел числа - не порть данные для формы.
       if (event.type == 'blur' && this.value.length < 5) {
         this.value = '';
       }
@@ -54,5 +55,9 @@ window.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('focus', mask, false);
     input.addEventListener('blur', mask, false);
     input.addEventListener('keydown', mask, false);
+    input.addEventListener('focus', function () {
+      // Устанавливаем курсор на положение ввода.
+      this.setSelectionRange(2, 2);
+    });
   });
 });

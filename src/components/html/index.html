@@ -43,45 +43,7 @@
                     <main class="main">
                         <p class="default-result-text">Список контактов пуст</p>
                         <!-- Group Accordeons -->
-                        <div class="accordion accordion-flush" id="accordionContactsGroup">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingOne">
-                                    <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#flush-collapseOne"
-                                        aria-expanded="false"
-                                        aria-controls="flush-collapseOne"
-                                    >
-                                        Accordion Item #1
-                                    </button>
-                                </h2>
-                                <div
-                                    id="flush-collapseOne"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="flush-headingOne"
-                                    data-bs-parent="#accordionFlushExample"
-                                >
-                                    <div class="accordion-body">
-                                        <div class="contact d-flex justify-content-between align-items-center">
-                                            <div class="contact-info d-flex justify-content-between align-items-center w-100 gap-3 p-3">
-                                                <p class="contact-fullname">{{Фамилия Имя Отчество}}</p>
-                                                <p class="contact-phone">{{+7 (ХХХ) ХХХ - ХХ - ХХ}}</p>
-                                            </div>
-                                            <div class="contact-controls d-flex justify-content-between align-items-center gap-3">
-                                                <svg data-cb-target="{{idGoupForEditing}}" class="edit-pencil---wrapper">
-                                                    <use x="10" y="8" xlink:href="../images/svg/pencil.svg#pencil"></use>
-                                                </svg>
-                                                <svg data-cb-target="{{idGoupForRemoving}}" class="trashcan---wrapper">
-                                                    <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="accordion accordion-flush" id="accordionContactsGroup"></div>
                         <!-- Group Accordeons end.-->
                     </main>
                     <!--  first -->
@@ -124,7 +86,7 @@
                                             pattern="\+7 \(\d{3}\) \d{3} \d{4}"
                                             class="form-control"
                                             placeholder="Введите номер"
-                                            value="+7 (222) 333 4444"
+                                          
                                         >
                                     </div>
                                     <!-- Goup select. -->
@@ -209,11 +171,13 @@
                     ></button>
                 </div>
                 <div class="toast-body">
+                    <p id="newContactWasCreated" class="d-none">Контакт <span></span> был <span id="createdWord" class="d-none">создан</span><span id="updatedWord" class="d-none">обновлен</span>.</p>
                     <p id="fullNameError" class="d-none">Не указаны ФИО контакта</p>
                     <p id="numError" class="d-none">Не правильно введен номер контакта</p>
                 </div>
             </div>
         </div>
+        <!-- ----------Templates------- -->
         <template id="groupItemTemplate">
             <div class="group d-flex gap-3 justify-content-center align-items-center">
                 <input
@@ -230,33 +194,43 @@
                 </svg>
             </div>
         </template>
-        <template id="newAccordionGroup" class="newAccordionGroup">
-            <div class="accordion accordion-flush" id="accordionGroup__name">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingOne">
-                        <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseOne"
-                            aria-expanded="false"
-                            aria-controls="flush-collapseOne"
-                        >
-                            Accordion Item #1
-                        </button>
-                    </h2>
-                    <div
-                        id="flush-collapseOne"
-                        class="accordion-collapse collapse"
-                        aria-labelledby="flush-headingOne"
-                        data-bs-parent="#accordionFlushExample"
+        <template id="newAccordionGroup">
+            <div class="accordion-item" id="accordionGroup__name">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne"
                     >
-                        <div class="accordion-body">
-                            Placeholder content for this accordion, which is intended to demonstrate the
-                            <code>.accordion-flush</code>
-                            class. This is the first item's accordion body.
-                        </div>
-                    </div>
+                        Accordion Item #1
+                    </button>
+                </h2>
+                <div
+                    id="flush-collapseOne"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample"
+                >
+                    <div class="accordion-body" id="accordionGroupBody" data-cb-target="idContactForRemoving"></div>
+                </div>
+            </div>
+        </template>
+        <template id="newContactInAccordion">
+            <div class="contact d-flex justify-content-between align-items-center">
+                <div class="contact-info d-flex justify-content-between align-items-center w-100 gap-3 p-3">
+                    <p class="contact-fullname">{{Фамилия Имя Отчество}}</p>
+                    <p class="contact-phone">{{+7 (ХХХ) ХХХ - ХХ - ХХ}}</p>
+                </div>
+                <div class="contact-controls d-flex justify-content-between align-items-center gap-3">
+                    <svg data-cb-edit="{{idContactForRemoving}}" class="edit-pencil---wrapper">
+                        <use x="10" y="8" xlink:href="../images/svg/pencil.svg#pencil"></use>
+                    </svg>
+                    <svg data-cb-target="{{idGoupForRemoving}}" class="trashcan---wrapper">
+                        <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
+                    </svg>
                 </div>
             </div>
         </template>
