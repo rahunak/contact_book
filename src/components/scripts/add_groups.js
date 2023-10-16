@@ -1,9 +1,19 @@
-// import offcanvasList from './offcanvas_elements';
+import { createOptions } from './add_contacts';
 
 const addGroupForm = document.querySelector('#addGroupForm');
 
-function removeGroup(groupId) {
+function removeGroup(groupId, thisObj) {
+  // Почистили localStorage
+  const contactBook = JSON.parse(localStorage.getItem('contactBook'));
+  delete contactBook.groups[thisObj.getAttribute('data-cb-target')];
+  localStorage.setItem('contactBook', JSON.stringify(contactBook));
 
+  // Удалили группу из групп-бургера.
+  thisObj.closest('div').remove();
+  // Удалили опшн из контакт-бургера.
+  document.querySelector(`#choseGroupBurger option[value=${groupId}]`).remove();
+  // Удалили группу из дашборда.
+  document.querySelector(`[data-cb-remove="accordion__${groupId}"]`).remove();
 }
 // groupCBId == id группы для синхронизации.
 function addAccordionGroup(groupName, groupCBId) {
@@ -18,7 +28,7 @@ function addAccordionGroup(groupName, groupCBId) {
   const newAccordionBtn = newAccordion.querySelector('button');
   newAccordionBtn.textContent = groupName;
   // Дальше изменяем атрибуты, для корректной работы бутстрапа
-  const newIdAccordion = `accordionGroup__${groupName.trim().split(' ').join('')}`;
+  const newIdAccordion = `accordionGroup__${groupCBId}`;
 
   newAccordionBtn.setAttribute('data-bs-target', `#flush-${newIdAccordion}`);
   newAccordionBtn.setAttribute('aria-controls', newIdAccordion);
@@ -39,26 +49,18 @@ function addGroupItemToBurger(groupName, groupId) {
   const newGroup = document.querySelector('#newGroup');
   newGroup.setAttribute('value', groupName);
   newGroup.setAttribute('id', groupId);
+  newGroup.setAttribute('aria-label', groupName);
   const removeBtn = document.querySelector(['[data-cb-target="idGoupForRemoving"]']);
   removeBtn.setAttribute('data-cb-target', groupId);
   removeBtn.addEventListener('click', function () {
-    // Почистили localStorage
-    const contactBook = JSON.parse(localStorage.getItem('contactBook'));
-    delete contactBook.groups[this.getAttribute('data-cb-target')];
-    localStorage.setItem('contactBook', JSON.stringify(contactBook));
-
-    // Удалили группу из бургера
-    this.closest('div').remove();
-    // Удалили группу из дашборда.
-    console.log('groupId', groupId);
-    document.querySelector(`[data-cb-remove="accordion__${groupId}"]`).remove();
+    removeGroup(groupId, this);
   });
 }
 
 function addGroupItem() {
   // Забираем данные из формы.
-  const formData = new FormData(addGroupForm);
-  const groupName = formData.get('group_name');
+  const formDataGroupItem = new FormData(addGroupForm);
+  const groupName = formDataGroupItem.get('group_name');
   if (groupName.trim() === '') return;
 
   // Очищаем старое название группы.
@@ -68,13 +70,15 @@ function addGroupItem() {
 
   // LocalStorage.
   const contactBook = JSON.parse(localStorage.getItem('contactBook'));
-  contactBook.groups[newId] = groupName;
+  contactBook.groups[newId] = { groupName };
   localStorage.setItem('contactBook', JSON.stringify(contactBook));
 
-  // Дорисовываем пункты групп в бургер.
+  // Дорисовываем пункты групп в групп-бургер.
   addGroupItemToBurger(groupName, newId);
   // Отрисовываем новую группу
   addAccordionGroup(groupName, newId);
+  // добавляем опшн в контакг-бургер.
+  document.querySelector('#choseGroupBurger').append(createOptions(groupName, newId));
 }
 
 // const testObject = { one: 1, two: 2, three: 3 };
@@ -111,9 +115,11 @@ document.querySelector('#addGroupInputWrapper .trashcan---wrapper').addEventList
 document.addEventListener('DOMContentLoaded', () => {
   // Проход по localStorage - надо оптимизировать.
   const contactBook = JSON.parse(localStorage.getItem('contactBook'));
-  for (const group in contactBook.groups) {
-    if (Object.hasOwn(contactBook.groups, group)) {
-      addAccordionGroup(contactBook.groups[group], group);
+  if (contactBook !== null && Object.prototype.hasOwnProperty.call(contactBook, 'groups') !== false) {
+    for (const group in contactBook.groups) {
+      if (Object.hasOwn(contactBook.groups, group)) {
+        addAccordionGroup(contactBook.groups[group].groupName, group);
+      }
     }
   }
 });

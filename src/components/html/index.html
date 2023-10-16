@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <!-- Required meta tags -->
+        <link rel="shortcut icon" href="../images/ico/book.ico" type="image/x-icon">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Contact Book</title>
@@ -63,9 +64,20 @@
                                     data-bs-parent="#accordionFlushExample"
                                 >
                                     <div class="accordion-body">
-                                        Placeholder content for this accordion, which is intended to demonstrate the
-                                        <code>.accordion-flush</code>
-                                        class. This is the first item's accordion body.
+                                        <div class="contact d-flex justify-content-between align-items-center">
+                                            <div class="contact-info d-flex justify-content-between align-items-center w-100 gap-3 p-3">
+                                                <p class="contact-fullname">{{Фамилия Имя Отчество}}</p>
+                                                <p class="contact-phone">{{+7 (ХХХ) ХХХ - ХХ - ХХ}}</p>
+                                            </div>
+                                            <div class="contact-controls d-flex justify-content-between align-items-center gap-3">
+                                                <svg data-cb-target="{{idGoupForEditing}}" class="edit-pencil---wrapper">
+                                                    <use x="10" y="8" xlink:href="../images/svg/pencil.svg#pencil"></use>
+                                                </svg>
+                                                <svg data-cb-target="{{idGoupForRemoving}}" class="trashcan---wrapper">
+                                                    <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -112,11 +124,17 @@
                                             pattern="\+7 \(\d{3}\) \d{3} \d{4}"
                                             class="form-control"
                                             placeholder="Введите номер"
+                                            value="+7 (222) 333 4444"
                                         >
                                     </div>
                                     <!-- Goup select. -->
-                                    <select id="choseGroupBurger" name="affiliation_user_group" class="form-select  mb-3" aria-label="выберите группу">
-                                        <option selected>Выберите группу</option>
+                                    <select
+                                        id="choseGroupBurger"
+                                        name="affiliation_user_group"
+                                        class="form-select  mb-3"
+                                        aria-label="выберите группу"
+                                    >
+                                        <option selected value="null">Выберите группу</option>
                                     </select>
                                 </div>
                                 <!-- Controls. -->
@@ -213,34 +231,34 @@
             </div>
         </template>
         <template id="newAccordionGroup" class="newAccordionGroup">
-                <div class="accordion accordion-flush" id="accordionGroup__name">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button
-                                class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#flush-collapseOne"
-                                aria-expanded="false"
-                                aria-controls="flush-collapseOne"
-                            >
-                                Accordion Item #1
-                            </button>
-                        </h2>
-                        <div
-                            id="flush-collapseOne"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="flush-headingOne"
-                            data-bs-parent="#accordionFlushExample"
+            <div class="accordion accordion-flush" id="accordionGroup__name">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne"
+                            aria-expanded="false"
+                            aria-controls="flush-collapseOne"
                         >
-                            <div class="accordion-body">
-                                Placeholder content for this accordion, which is intended to demonstrate the
-                                <code>.accordion-flush</code>
-                                class. This is the first item's accordion body.
-                            </div>
+                            Accordion Item #1
+                        </button>
+                    </h2>
+                    <div
+                        id="flush-collapseOne"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingOne"
+                        data-bs-parent="#accordionFlushExample"
+                    >
+                        <div class="accordion-body">
+                            Placeholder content for this accordion, which is intended to demonstrate the
+                            <code>.accordion-flush</code>
+                            class. This is the first item's accordion body.
                         </div>
                     </div>
                 </div>
+            </div>
         </template>
     </body>
 </html>
