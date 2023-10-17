@@ -227,19 +227,16 @@ document.querySelector('#addGroupInputWrapper .trashcan---wrapper').addEventList
   this.closest('div').classList.add('invisible');
 });
 
-function createAppLocalStorageObj() {}
-function getDataFromLocalStorage() {
-
-}
-
-// -------------START--------
-document.addEventListener('DOMContentLoaded', () => {
+function checkAppStoreOrInitialize() {
   // 1. Устанавливаем наш localStorage обьект.
   const isExistContactBookData = localStorage.getItem('contactBook');
   // Проверяем есть ли у юзера данные в localStorage, которые соответствуют нашему приложению.
   if (JSON.parse(isExistContactBookData) == null || Object.prototype.hasOwnProperty.call(JSON.parse(isExistContactBookData), 'groups') === false) {
     localStorage.setItem('contactBook', JSON.stringify({ groups: {} }));
   }
+}
+function getDataFromLocalStorage() {
+  checkAppStoreOrInitialize();
   // Если у юзера что-то было раньше достаем из localStorage;
   const contactBook = JSON.parse(localStorage.getItem('contactBook'));
   if (contactBook !== null && Object.prototype.hasOwnProperty.call(contactBook, 'groups') !== false) {
@@ -259,6 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+}
+
+// -------------START--------
+document.addEventListener('DOMContentLoaded', () => {
+  getDataFromLocalStorage();
 });
 
 export { addGroupItemToBurger, addAccordionGroup, addContactToAccordion };
