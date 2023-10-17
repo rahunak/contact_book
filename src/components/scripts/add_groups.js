@@ -5,7 +5,6 @@ import { removeRecord, addNewGroupRecord } from './actions_localStorage';
 const offcanvasElementList = [].slice.call(document.querySelectorAll('.offcanvas'));
 const offcanvasList = offcanvasElementList.map((offcanvasEl) => {
   offcanvasEl.addEventListener('show.bs.offcanvas', () => {
-    console.log('localStorage', JSON.parse(localStorage.getItem('contactBook')));
     // Очищаем старый бургер - можно усложнить: делать проверку на наличие в localStorage.
     document.querySelectorAll('#offcanvasScrollingGroup .offcanvas-body .groups div').forEach((div) => div.remove());
     // Отображаем все что есть в localStorage.
@@ -144,7 +143,7 @@ function addEmptyAccordionTodashboard(groupName = 'Контакты без гр�
 // groupCBId == newId (`group_${Date.now()}_${groupName}`) группы для синхронизации.
 function addAccordionGroup(groupName, groupCBId = 'without_group', groupContacts) {
   if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
-  addEmptyAccordionTodashboard(groupName, groupCBId, groupContacts);
+  addEmptyAccordionTodashboard(groupName, groupCBId);
 
   const newAccordion = document.querySelector(`#accordionGroup__${groupCBId}`);
   // Заполняем группы аккордиона контактами.
@@ -195,7 +194,10 @@ function addOptionToContactForm(groupName, groupId) {
   if (groupName === 'without_group') return;
   document.querySelector('#choseGroupBurger').append(createOption(groupName, groupId));
 }
-function addGroupItem() {
+function groupFormHandler(event) {
+  // Проверяем ввел ли пользователь хоть какое название группы.
+  if (event.target.querySelector('#addGroupInput').value.length === 0) return;
+
   // Забираем данные из формы.
   const formDataGroupItem = new FormData(addGroupForm);
   let groupName = formDataGroupItem.get('group_name');
@@ -208,9 +210,9 @@ function addGroupItem() {
   const newId = `group_${Date.now()}_${groupName}`;
   // Добавляем запись в localStorage.
   addNewGroupRecord(groupName, newId);
-  // Отрисовываем новую группу в аккордионе дашборда.
-  addAccordionGroup(groupName, newId);
 
+  // Отрисовываем новую группу в аккордионе дашборда.
+  addEmptyAccordionTodashboard(groupName, newId);
   if (groupName.trim() !== '') {
     // Очищаем старое название группы.
     document.querySelector('#addGroupInput').value = '';
@@ -223,7 +225,7 @@ function addGroupItem() {
 
 addGroupForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  addGroupItem();
+  groupFormHandler(e);
 });
 
 const addGroupButton = document.querySelector('#addGroupButton');

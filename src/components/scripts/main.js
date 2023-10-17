@@ -10,7 +10,7 @@ function createContact(fullName, phone, group = 'without_group') {
   const contactId = `contact_${Date.now()}_${fullName}`;
 
   addNewContactRecord(fullName, phone, contactId, group);
-  if (group == 'without_group') addAccordionGroup();
+  if (group === 'without_group') addAccordionGroup();
   addContactToAccordion(group, fullName, phone, contactId, group);
 }
 
