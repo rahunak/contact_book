@@ -86,7 +86,6 @@
                                             pattern="\+7 \(\d{3}\) \d{3} \d{4}"
                                             class="form-control"
                                             placeholder="Введите номер"
-                                          
                                         >
                                     </div>
                                     <!-- Goup select. -->
@@ -161,7 +160,7 @@
                 aria-atomic="true"
             >
                 <div class="toast-header">
-                    <strong class="me-auto">Bootstrap</strong>
+                    <strong class="me-auto">Контакт создан</strong>
                     <small>11 mins ago</small>
                     <button
                         type="button"
@@ -171,13 +170,19 @@
                     ></button>
                 </div>
                 <div class="toast-body">
-                    <p id="newContactWasCreated" class="d-none">Контакт <span></span> был <span id="createdWord" class="d-none">создан</span><span id="updatedWord" class="d-none">обновлен</span>.</p>
+                    <p id="newContactWasCreated" class="d-none">
+                        Контакт
+                        <span></span>
+                        был
+                        <span id="createdWord" class="d-none">создан</span>
+                        <span id="updatedWord" class="d-none">обновлен</span>
+                        .
+                    </p>
                     <p id="fullNameError" class="d-none">Не указаны ФИО контакта</p>
                     <p id="numError" class="d-none">Не правильно введен номер контакта</p>
                 </div>
             </div>
         </div>
-
         <template id="groupItemTemplate">
             <div class="group d-flex gap-3 justify-content-center align-items-center">
                 <input
@@ -214,7 +219,7 @@
                     aria-labelledby="flush-headingOne"
                     data-bs-parent="#accordionFlushExample"
                 >
-                    <div class="accordion-body"  ></div>
+                    <div class="accordion-body"></div>
                 </div>
             </div>
         </template>

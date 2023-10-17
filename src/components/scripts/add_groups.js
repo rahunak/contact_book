@@ -5,6 +5,7 @@ import { removeRecord, addNewGroupRecord } from './actions_localStorage';
 const offcanvasElementList = [].slice.call(document.querySelectorAll('.offcanvas'));
 const offcanvasList = offcanvasElementList.map((offcanvasEl) => {
   offcanvasEl.addEventListener('show.bs.offcanvas', () => {
+    console.log('localStorage', JSON.parse(localStorage.getItem('contactBook')));
     // Очищаем старый бургер - можно усложнить: делать проверку на наличие в localStorage.
     document.querySelectorAll('#offcanvasScrollingGroup .offcanvas-body .groups div').forEach((div) => div.remove());
     // Отображаем все что есть в localStorage.
@@ -24,7 +25,6 @@ const offcanvasList = offcanvasElementList.map((offcanvasEl) => {
 const addGroupForm = document.querySelector('#addGroupForm');
 
 function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
-  console.log("я опять тут же",targetAcc,fullName, phone, contactId, groupId,'==>',document.querySelector(`#accordionGroup__without_group` ));
   let contactAccItem = document.querySelector('#newContactInAccordion');
   if (contactAccItem !== null) {
     contactAccItem = contactAccItem.content.cloneNode(true);
@@ -92,12 +92,9 @@ function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
     }
   }
 }
-
 function removeGroup(groupId, thisObj) {
   // Почистили localStorage.
-  const contactBook = JSON.parse(localStorage.getItem('contactBook'));
-  delete contactBook.groups[thisObj.getAttribute('data-cb-target')];
-  localStorage.setItem('contactBook', JSON.stringify(contactBook));
+  removeRecord(thisObj.getAttribute('data-cb-target'));
 
   // Удалили группу из групп-бургера.
   thisObj.closest('div').remove();
@@ -106,42 +103,40 @@ function removeGroup(groupId, thisObj) {
   // Удалили группу из дашборда.
   document.querySelector(`[data-cb-remove="accordion__${groupId}"]`).remove();
 }
-function addAccordionToDashboard(groupName = 'Контакты без группы', groupCBId = 'without_group', groupContacts = null){
+function addAccordionToDashboard(groupName = 'Контакты без группы', groupCBId = 'without_group', groupContacts = null) {
   if (document.querySelector(`#accordionGroup__${groupCBId}`) !== null) return;
-    // Подготавливаем темплейт аккордиона группы.
-    let groupAccordionTemplate = document.querySelector('#newAccordionGroup');
-    if (groupAccordionTemplate !== null) {
-      groupAccordionTemplate = groupAccordionTemplate.content.cloneNode(true);
-    }
-  
-    document.querySelector('.main .accordion').append(groupAccordionTemplate);// Вставили темплейт аккордеона.
-    const newAccordion = document.querySelector('#accordionGroup__name');// Начинаем модификацию.
-    const newAccordionBtn = newAccordion.querySelector('button');
-    if (groupName == null || groupName == 'without_group') {
-      newAccordionBtn.textContent ='Контакты без группы';
-    }else{
-      newAccordionBtn.textContent = groupName;
-    }
-   
-    // Дальше изменяем атрибуты, для корректной работы бутстрапа.
-    const newIdAccordion = `accordionGroup__${groupCBId}`;
-  
-    newAccordionBtn.setAttribute('data-bs-target', `#flush-${newIdAccordion}`);
-    newAccordionBtn.setAttribute('aria-controls', newIdAccordion);
-    newAccordion.querySelector('.collapse').setAttribute('id', `flush-${newIdAccordion}`);
-    newAccordion.setAttribute('data-cb-remove', `accordion__${groupCBId}`);
-    if (groupName === 'Контакты без группы') groupName = 'without_group';
-    newAccordion.setAttribute('data-cb-simple-name-group',groupName);
-    newAccordion.setAttribute('id', newIdAccordion);
+  // Подготавливаем темплейт аккордиона группы.
+  let groupAccordionTemplate = document.querySelector('#newAccordionGroup');
+  if (groupAccordionTemplate !== null) {
+    groupAccordionTemplate = groupAccordionTemplate.content.cloneNode(true);
+  }
 
+  document.querySelector('.main .accordion').append(groupAccordionTemplate);// Вставили темплейт аккордеона.
+  const newAccordion = document.querySelector('#accordionGroup__name');// Начинаем модификацию.
+  const newAccordionBtn = newAccordion.querySelector('button');
+  if (groupName == null || groupName == 'without_group') {
+    newAccordionBtn.textContent = 'Контакты без группы';
+  } else {
+    newAccordionBtn.textContent = groupName;
+  }
+
+  // Дальше изменяем атрибуты, для корректной работы бутстрапа.
+  const newIdAccordion = `accordionGroup__${groupCBId}`;
+
+  newAccordionBtn.setAttribute('data-bs-target', `#flush-${newIdAccordion}`);
+  newAccordionBtn.setAttribute('aria-controls', newIdAccordion);
+  newAccordion.querySelector('.collapse').setAttribute('id', `flush-${newIdAccordion}`);
+  newAccordion.setAttribute('data-cb-remove', `accordion__${groupCBId}`);
+  if (groupName === 'Контакты без группы') groupName = 'without_group';
+  newAccordion.setAttribute('data-cb-simple-name-group', groupName);
+  newAccordion.setAttribute('id', newIdAccordion);
 }
 // groupCBId == newId (`group_${Date.now()}_${groupName}`) группы для синхронизации.
 function addAccordionGroup(groupName, groupCBId = 'without_group', groupContacts) {
-
-if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
+  if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
   addAccordionToDashboard(groupName, groupCBId, groupContacts);
 
-  let newAccordion = document.querySelector(`#accordionGroup__${groupCBId}`);
+  const newAccordion = document.querySelector(`#accordionGroup__${groupCBId}`);
   // Заполняем группы аккордиона контактами.
   if (groupContacts !== null && groupContacts !== undefined) {
     for (const contact in groupContacts) {
@@ -156,13 +151,10 @@ if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== nul
       }
     }
   }
-
 }
 // Добавить пункт в Групп-бургер ? тебе сюда.
 function addGroupItemToBurger(groupName, groupId) {
-  console.log("eue",groupName, groupId);
-  if (groupName === undefined || groupName ==='without_group') return;
-  console.log("дальше",groupName, groupId);
+  if (groupName === undefined || groupName === 'without_group') return;
   // Подготавливаем темплейт группы.
   let groupItemTemplate = document.querySelector('#groupItemTemplate');
   if (groupItemTemplate !== null) {
@@ -182,6 +174,13 @@ function addGroupItemToBurger(groupName, groupId) {
   });
 }
 
+function createOptions(groupName, groupId) {
+  const opt = document.createElement('option');
+  opt.textContent = groupName;
+  opt.setAttribute('value', groupId);
+  return opt;
+}
+
 function addGroupItem() {
   // Забираем данные из формы.
   const formDataGroupItem = new FormData(addGroupForm);
@@ -189,6 +188,7 @@ function addGroupItem() {
   if (groupName.trim() === '') {
     groupName = 'without_group';
   }
+  // Если группа уже существует на дашборде - не вставляй ее.
   if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
   // Уникальный ID для группы - можно было бы использовать uuid либу.
   const newId = `group_${Date.now()}_${groupName}`;
@@ -206,13 +206,6 @@ function addGroupItem() {
     if (groupName == 'without_group') return;
     document.querySelector('#choseGroupBurger').append(createOptions(groupName, newId));
   }
-}
-
-function createOptions(groupName, groupId) {
-  const opt = document.createElement('option');
-  opt.textContent = groupName;
-  opt.setAttribute('value', groupId);
-  return opt;
 }
 
 addGroupForm.addEventListener('submit', (e) => {
@@ -234,8 +227,20 @@ document.querySelector('#addGroupInputWrapper .trashcan---wrapper').addEventList
   this.closest('div').classList.add('invisible');
 });
 
+function createAppLocalStorageObj() {}
+function getDataFromLocalStorage() {
+
+}
+
 // -------------START--------
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Устанавливаем наш localStorage обьект.
+  const isExistContactBookData = localStorage.getItem('contactBook');
+  // Проверяем есть ли у юзера данные в localStorage, которые соответствуют нашему приложению.
+  if (JSON.parse(isExistContactBookData) == null || Object.prototype.hasOwnProperty.call(JSON.parse(isExistContactBookData), 'groups') === false) {
+    localStorage.setItem('contactBook', JSON.stringify({ groups: {} }));
+  }
+  // Если у юзера что-то было раньше достаем из localStorage;
   const contactBook = JSON.parse(localStorage.getItem('contactBook'));
   if (contactBook !== null && Object.prototype.hasOwnProperty.call(contactBook, 'groups') !== false) {
     for (const groupId in contactBook.groups) {

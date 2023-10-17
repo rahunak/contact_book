@@ -11,51 +11,71 @@ function createContact(fullName, phone, group = 'without_group') {
 
   addNewContactRecord(fullName, phone, contactId, group);
   if (group == 'without_group') addAccordionGroup();
-  console.log('1/createContact', group, fullName, phone, contactId, group);
   addContactToAccordion(group, fullName, phone, contactId, group);
 }
-const createContactForm = document.querySelector('#createContactForm');
 
+function setDefaultValueToContactForm() {
+  document.querySelector('#user_full_name').value = '';
+  document.querySelector('#user_phone_num').value = '';
+  document.querySelector("#choseGroupBurger option[value='without_group']").selected = true;
+}
+function contactWasCreatedToast(contactFullName, group) {
+  toastList[0].show();
+  let groupName = group;
+  if (groupName == null || groupName === 'without_group') {
+    groupName = 'Без группы';
+  } else if (typeof groupName === 'string') {
+    // Pay attention - destructuring of array!
+    [,, groupName] = group.split('_');
+  } else {
+    console.warn('Something strange in contactWasCreatedToast(),\n groupName==', groupName, ',\n typeof groupName ==', typeof groupName);
+  }
+  document.querySelector('#errorToastAddContact small').textContent = groupName;
+
+  document.querySelector('#newContactWasCreated span').textContent = contactFullName;
+  document.querySelector('#newContactWasCreated').classList.remove('d-none');
+  if (window.isEditing) {
+    document.querySelector('#newContactWasCreated #updatedWord').classList.remove('d-none');
+  } else {
+    document.querySelector('#newContactWasCreated #createdWord').classList.remove('d-none');
+  }
+}
+
+function simpeFormValidation(fullName, phone) {
+  // Так же можно было бы добавить клиентскую защиту от ввода вредоносного кода.
+  if (fullName.trim().length === 0) {
+    toastList[0].show();
+    document.querySelector('#fullNameError').classList.remove('d-none');
+  }
+  if (phone.trim().length === 0) {
+    toastList[0].show();
+    document.querySelector('#numError').classList.remove('d-none');
+  }
+}
+
+const createContactForm = document.querySelector('#createContactForm');
 createContactForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const formDataContactForm = new FormData(createContactForm);
   const userFullName = formDataContactForm.get('user_full_name');
   const userPhoneNum = formDataContactForm.get('user_phone_num');
   let affiliationUserGroup = formDataContactForm.get('affiliation_user_group');
-  // Так же можно было бы добавить клиентскую защиту от ввода вредоносного кода.
 
-  if (userFullName.trim().length === 0) {
-    toastList[0].show();
-    document.querySelector('#fullNameError').classList.remove('d-none');
-  }
-  if (userPhoneNum.trim().length === 0) {
-    toastList[0].show();
-    document.querySelector('#numError').classList.remove('d-none');
-  }
+  // Небольшая валидация формы.
+  simpeFormValidation(userFullName, userPhoneNum);
+
   // Не было ошибок при сабмите формы? => создаем контакт.
   if (userPhoneNum.trim().length !== 0 && userFullName.trim().length !== 0) {
     // Очищаем значения.
-    document.querySelector('#user_full_name').value = '';
-    document.querySelector('#user_phone_num').value = '';
-    document.querySelector("#choseGroupBurger option[value='without_group']").selected = true;
-    // Отображаем уведомление о сделанной успешной записи.
-    toastList[0].show();
-    document.querySelector('#newContactWasCreated span').textContent = userFullName;
-    document.querySelector('#newContactWasCreated').classList.remove('d-none');
-    if (window.isEditing) {
-      document.querySelector('#newContactWasCreated #updatedWord').classList.remove('d-none');
-    } else {
-      document.querySelector('#newContactWasCreated #createdWord').classList.remove('d-none');
-    }
+    setDefaultValueToContactForm();
+
     if (affiliationUserGroup === null) {
       affiliationUserGroup = 'without_group';
     }
+    // Отображаем уведомление о сделанной успешной записи.
+    contactWasCreatedToast(userFullName, affiliationUserGroup);
+    // Создаем контакт в дашборде.
     createContact(userFullName, userPhoneNum, affiliationUserGroup);
   }
 });
 
-const isExistContactBookData = localStorage.getItem('contactBook');
-// Проверяем есть ли у юзера данные в localStorage, которые соответствуют нашему приложению.
-if (JSON.parse(isExistContactBookData) == null || Object.prototype.hasOwnProperty.call(JSON.parse(isExistContactBookData), 'groups') == false) {
-  localStorage.setItem('contactBook', JSON.stringify({ groups: {} }));
-}
