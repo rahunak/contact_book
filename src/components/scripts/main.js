@@ -10,7 +10,7 @@ function createContact(fullName, phone, group = 'without_group') {
   const contactId = `contact_${Date.now()}_${fullName}`;
 
   addNewContactRecord(fullName, phone, contactId, group);
-  addContactToAccordion(group, fullName, phone, contactId);
+  addContactToAccordion(group, fullName, phone, contactId, group);
 }
 const createContactForm = document.querySelector('#createContactForm');
 
@@ -35,7 +35,7 @@ createContactForm.addEventListener('submit', (e) => {
     // Очищаем значения.
     document.querySelector('#user_full_name').value = '';
     document.querySelector('#user_phone_num').value = '';
-    document.querySelector("#choseGroupBurger option[value='null']").selected = true;
+    document.querySelector("#choseGroupBurger option[value='without_group']").selected = true;
     // Отображаем уведомление о сделанной успешной записи.
     toastList[0].show();
     document.querySelector('#newContactWasCreated span').textContent = userFullName;

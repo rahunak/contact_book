@@ -52,10 +52,10 @@
                         data-bs-scroll="true"
                         tabindex="-1"
                         id="offcanvasScrollingContacts"
-                        aria-labelledby="offcanvasScrollingLabel"
+                        aria-labelledby="offcanvasScrollingLabel_addingContact"
                     >
                         <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Добавление контакта</h5>
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel_addingContact">Добавление контакта</h5>
                             <button
                                 type="button"
                                 class="btn-close text-reset"
@@ -96,7 +96,7 @@
                                         class="form-select  mb-3"
                                         aria-label="выберите группу"
                                     >
-                                        <option selected value="null">Выберите группу</option>
+                                        <option selected value="without_group">Выберите группу</option>
                                     </select>
                                 </div>
                                 <!-- Controls. -->
@@ -112,10 +112,10 @@
                         data-bs-scroll="true"
                         tabindex="-1"
                         id="offcanvasScrollingGroup"
-                        aria-labelledby="offcanvasScrollingLabel"
+                        aria-labelledby="offcanvasScrollingLabel__addingContactsGroup"
                     >
                         <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Группы контактов</h5>
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel__addingContactsGroup">Группы контактов</h5>
                             <button
                                 type="button"
                                 class="btn-close text-reset"
@@ -134,7 +134,7 @@
                                         id="addGroupInput"
                                         name="group_name"
                                         placeholder="Введите название"
-                                        aria-describedby="Введите название группы"
+                                        aria-describedby="enter-name-of-group"
                                     >
                                     <svg class="trashcan---wrapper">
                                         <use x="10" y="8" xlink:href="../images/svg/trushcan.svg#can"></use>
@@ -177,7 +177,7 @@
                 </div>
             </div>
         </div>
-        <!-- ----------Templates------- -->
+
         <template id="groupItemTemplate">
             <div class="group d-flex gap-3 justify-content-center align-items-center">
                 <input
@@ -214,7 +214,7 @@
                     aria-labelledby="flush-headingOne"
                     data-bs-parent="#accordionFlushExample"
                 >
-                    <div class="accordion-body" id="accordionGroupBody" data-cb-target="idContactForRemoving"></div>
+                    <div class="accordion-body"  ></div>
                 </div>
             </div>
         </template>

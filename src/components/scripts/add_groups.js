@@ -23,16 +23,17 @@ const offcanvasList = offcanvasElementList.map((offcanvasEl) => {
 
 const addGroupForm = document.querySelector('#addGroupForm');
 
-function addContactToAccordion(targetAcc, fullName, phone, contactId) {
+function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
   let contactAccItem = document.querySelector('#newContactInAccordion');
   if (contactAccItem !== null) {
     contactAccItem = contactAccItem.content.cloneNode(true);
     contactAccItem.querySelector('.contact').setAttribute('data-cb-contact-id', contactId);
+    contactAccItem.querySelector('.contact').setAttribute('data-cb-contact-relate-to-group', groupId);
     contactAccItem.querySelector('.contact-fullname').textContent = fullName;
     contactAccItem.querySelector('.contact-phone').textContent = phone;
     if (typeof targetAcc !== 'string') {
-      // Устанавили данные о группе для контакт группы
-      targetAcc.setAttribute('data-cb-group-id', targetAcc.getAttribute('id').split('__')[1]);
+      // Устанавили данные о группе для контакт группы.
+      targetAcc.setAttribute('data-cb-group-id', groupId);
     }
 
     // Хендлеры для редактирования контакта.
@@ -45,14 +46,19 @@ function addContactToAccordion(targetAcc, fullName, phone, contactId) {
       userPhoneNum.value = phone;
 
       const choseGroupBurger = document.querySelector(`#choseGroupBurger [value="${this.closest('.accordion-item').getAttribute('data-cb-group-id')}"]`);
-      choseGroupBurger.selected = true;
+      if (choseGroupBurger !== null) {
+        choseGroupBurger.selected = true;
+      }
+
       offcanvasList[0].show();
 
       removeRecord(contactId);
       // Маленький трюк для понимания что сейчас происходит редактирование контакта.
       window.isEditing = true;
-      window.isEditingContactId = contactId;
+
+      window.isEditingContactId = groupId;
     });
+
     // Хендлеры для удаления контактов из аккордиона.
     const removeBtn = contactAccItem.querySelector('[data-cb-target]');
     removeBtn.setAttribute('data-cb-target', contactId);
@@ -63,8 +69,14 @@ function addContactToAccordion(targetAcc, fullName, phone, contactId) {
 
     let targetForPasting = targetAcc;
     if (window.isEditing) {
-      document.querySelector(`[data-cb-contact-id=${window.isEditingContactId}]`).replaceWith(contactAccItem);
-      window.isEditin = null;
+      if (targetAcc === window.isEditingContactId) {
+        document.querySelector(`[data-cb-contact-relate-to-group=${window.isEditingContactId}]`).replaceWith(contactAccItem);
+      } else {
+        document.querySelector(`[data-cb-contact-relate-to-group=${window.isEditingContactId}]`).remove();
+        document.querySelector(`#flush-accordionGroup__${targetAcc} .accordion-body`).append(contactAccItem);
+      }
+
+      window.isEditing = null;
       window.isEditingContactId = null;
     } else if (typeof targetForPasting === 'string') {
       targetForPasting = document.querySelector(`#accordionGroup__${targetAcc} .accordion-body`);
@@ -121,6 +133,7 @@ function addAccordionGroup(groupName = 'Контакты без группы', g
         groupContacts[contact].fullName,
         groupContacts[contact].phone,
         contact,
+        groupCBId,
       );
     }
   }
