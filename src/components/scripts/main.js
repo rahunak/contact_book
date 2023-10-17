@@ -1,15 +1,17 @@
 import toastList from './toasts_elements';
-import { addContactToAccordion } from './add_groups';
+import { addContactToAccordion, addAccordionGroup } from './add_groups';
 import { addNewContactRecord } from './actions_localStorage';
 
 function createContact(fullName, phone, group = 'without_group') {
-  if (group === 'null') {
+  if (group == null || group === 'null') {
     group = 'without_group';
   }
   // Уникальный ID для контакта - можно было бы использовать uuid либу.
   const contactId = `contact_${Date.now()}_${fullName}`;
 
   addNewContactRecord(fullName, phone, contactId, group);
+  if (group == 'without_group') addAccordionGroup();
+  console.log('1/createContact', group, fullName, phone, contactId, group);
   addContactToAccordion(group, fullName, phone, contactId, group);
 }
 const createContactForm = document.querySelector('#createContactForm');

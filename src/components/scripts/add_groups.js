@@ -24,6 +24,7 @@ const offcanvasList = offcanvasElementList.map((offcanvasEl) => {
 const addGroupForm = document.querySelector('#addGroupForm');
 
 function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
+  console.log("я опять тут же",targetAcc,fullName, phone, contactId, groupId,'==>',document.querySelector(`#accordionGroup__without_group` ));
   let contactAccItem = document.querySelector('#newContactInAccordion');
   if (contactAccItem !== null) {
     contactAccItem = contactAccItem.content.cloneNode(true);
@@ -79,7 +80,10 @@ function addContactToAccordion(targetAcc, fullName, phone, contactId, groupId) {
       window.isEditing = null;
       window.isEditingContactId = null;
     } else if (typeof targetForPasting === 'string') {
+      // Желаетельно отрефакторить, чтобы меньше было коллизий.
+
       targetForPasting = document.querySelector(`#accordionGroup__${targetAcc} .accordion-body`);
+
       if (targetForPasting !== null) {
         targetForPasting.append(contactAccItem);
       }
@@ -102,45 +106,63 @@ function removeGroup(groupId, thisObj) {
   // Удалили группу из дашборда.
   document.querySelector(`[data-cb-remove="accordion__${groupId}"]`).remove();
 }
+function addAccordionToDashboard(groupName = 'Контакты без группы', groupCBId = 'without_group', groupContacts = null){
+  if (document.querySelector(`#accordionGroup__${groupCBId}`) !== null) return;
+    // Подготавливаем темплейт аккордиона группы.
+    let groupAccordionTemplate = document.querySelector('#newAccordionGroup');
+    if (groupAccordionTemplate !== null) {
+      groupAccordionTemplate = groupAccordionTemplate.content.cloneNode(true);
+    }
+  
+    document.querySelector('.main .accordion').append(groupAccordionTemplate);// Вставили темплейт аккордеона.
+    const newAccordion = document.querySelector('#accordionGroup__name');// Начинаем модификацию.
+    const newAccordionBtn = newAccordion.querySelector('button');
+    if (groupName == null || groupName == 'without_group') {
+      newAccordionBtn.textContent ='Контакты без группы';
+    }else{
+      newAccordionBtn.textContent = groupName;
+    }
+   
+    // Дальше изменяем атрибуты, для корректной работы бутстрапа.
+    const newIdAccordion = `accordionGroup__${groupCBId}`;
+  
+    newAccordionBtn.setAttribute('data-bs-target', `#flush-${newIdAccordion}`);
+    newAccordionBtn.setAttribute('aria-controls', newIdAccordion);
+    newAccordion.querySelector('.collapse').setAttribute('id', `flush-${newIdAccordion}`);
+    newAccordion.setAttribute('data-cb-remove', `accordion__${groupCBId}`);
+    if (groupName === 'Контакты без группы') groupName = 'without_group';
+    newAccordion.setAttribute('data-cb-simple-name-group',groupName);
+    newAccordion.setAttribute('id', newIdAccordion);
+
+}
 // groupCBId == newId (`group_${Date.now()}_${groupName}`) группы для синхронизации.
-function addAccordionGroup(groupName = 'Контакты без группы', groupCBId = 'withotGroup', groupContacts = null) {
-  // Подготавливаем темплейт аккордиона группы.
-  let groupAccordionTemplate = document.querySelector('#newAccordionGroup');
-  if (groupAccordionTemplate !== null) {
-    groupAccordionTemplate = groupAccordionTemplate.content.cloneNode(true);
-  }
+function addAccordionGroup(groupName, groupCBId = 'without_group', groupContacts) {
 
-  document.querySelector('.main .accordion').append(groupAccordionTemplate);// Вставили темплейт аккордеона.
-  const newAccordion = document.querySelector('#accordionGroup__name');// Начинаем модификацию.
-  const newAccordionBtn = newAccordion.querySelector('button');
+if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
+  addAccordionToDashboard(groupName, groupCBId, groupContacts);
 
-  newAccordionBtn.textContent = groupName;
-  // Дальше изменяем атрибуты, для корректной работы бутстрапа.
-  const newIdAccordion = `accordionGroup__${groupCBId}`;
-
-  newAccordionBtn.setAttribute('data-bs-target', `#flush-${newIdAccordion}`);
-  newAccordionBtn.setAttribute('aria-controls', newIdAccordion);
-  newAccordion.querySelector('.collapse').setAttribute('id', `flush-${newIdAccordion}`);
-  newAccordion.setAttribute('data-cb-remove', `accordion__${groupCBId}`);
-  newAccordion.setAttribute('id', newIdAccordion);
-
+  let newAccordion = document.querySelector(`#accordionGroup__${groupCBId}`);
   // Заполняем группы аккордиона контактами.
-
-  for (const contact in groupContacts) {
-    if (Object.hasOwn(groupContacts, contact) && contact !== 'groupName') {
-      addContactToAccordion(
-        newAccordion,
-        groupContacts[contact].fullName,
-        groupContacts[contact].phone,
-        contact,
-        groupCBId,
-      );
+  if (groupContacts !== null && groupContacts !== undefined) {
+    for (const contact in groupContacts) {
+      if (Object.hasOwn(groupContacts, contact) && contact !== 'groupName') {
+        addContactToAccordion(
+          newAccordion,
+          groupContacts[contact].fullName,
+          groupContacts[contact].phone,
+          contact,
+          groupCBId,
+        );
+      }
     }
   }
+
 }
 // Добавить пункт в Групп-бургер ? тебе сюда.
 function addGroupItemToBurger(groupName, groupId) {
-  if (groupName === undefined) return;
+  console.log("eue",groupName, groupId);
+  if (groupName === undefined || groupName ==='without_group') return;
+  console.log("дальше",groupName, groupId);
   // Подготавливаем темплейт группы.
   let groupItemTemplate = document.querySelector('#groupItemTemplate');
   if (groupItemTemplate !== null) {
@@ -167,6 +189,7 @@ function addGroupItem() {
   if (groupName.trim() === '') {
     groupName = 'without_group';
   }
+  if (document.querySelector(`[data-cb-simple-name-group="${groupName}"]`) !== null) return;
   // Уникальный ID для группы - можно было бы использовать uuid либу.
   const newId = `group_${Date.now()}_${groupName}`;
   // Добавляем запись в localStorage.
@@ -180,6 +203,7 @@ function addGroupItem() {
     // Дорисовываем пункты групп в групп-бургер.
     addGroupItemToBurger(groupName, newId);
     // добавляем опшн в контакт-бургер.
+    if (groupName == 'without_group') return;
     document.querySelector('#choseGroupBurger').append(createOptions(groupName, newId));
   }
 }
