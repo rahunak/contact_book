@@ -24,10 +24,12 @@ function contactWasCreatedToast(contactFullName, group) {
   let groupName = group;
   if (groupName == null || groupName === 'without_group') {
     groupName = 'Без группы';
-  } else if (typeof groupName === 'string') {
+  }
+  else if (typeof groupName === 'string') {
     // Pay attention - destructuring of array!
     [,, groupName] = group.split('_');
-  } else {
+  }
+  else {
     console.warn('Something strange in contactWasCreatedToast(),\n groupName==', groupName, ',\n typeof groupName ==', typeof groupName);
   }
   document.querySelector('#errorToastAddContact small').textContent = groupName;
@@ -36,7 +38,8 @@ function contactWasCreatedToast(contactFullName, group) {
   document.querySelector('#newContactWasCreated').classList.remove('d-none');
   if (window.isEditing) {
     document.querySelector('#newContactWasCreated #updatedWord').classList.remove('d-none');
-  } else {
+  }
+  else {
     document.querySelector('#newContactWasCreated #createdWord').classList.remove('d-none');
   }
 }
@@ -78,4 +81,3 @@ createContactForm.addEventListener('submit', (e) => {
     createContact(userFullName, userPhoneNum, affiliationUserGroup);
   }
 });
-

@@ -10,6 +10,7 @@
   },
   "rules": {
     "no-restricted-syntax":"off",
-    "no-continue":"off"
+    "no-continue":"off",
+    "brace-style": ["error", "stroustrup"]
   }
 }
