@@ -1,0 +1,33 @@
+.sidebar {
+  position: absolute;
+  background-color: #ffffff;
+  max-width: 80%;
+  height: 100vh;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  transition: all ease-in 300ms;
+
+  &:is(.open) {
+    transform: translateX(0);
+  }
+
+  &:is(.closed) {
+    transform: translateX(-100%);
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.sidebar-title {
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #000000;
+}

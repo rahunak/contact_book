@@ -1,0 +1,35 @@
+.button {
+  height: 38px;
+  border-radius: 6px;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0px;
+  text-align: left;
+  border: 0;
+  padding: 10px 14px;
+  color: #FFFFFF;
+  margin: 0 calc(1rem / 2);
+  cursor: pointer;
+
+  &:hover {
+    background-color: #D1003E;
+  }
+
+  &:is(.red) {
+    background-color: #F81155;
+
+    &:hover {
+      background-color: #D1003E;
+    }
+  }
+
+  &:is(.blue) {
+    background-color: #005BFE;
+
+    &:hover {
+      background-color: #0047C6;
+    }
+  }
+}
