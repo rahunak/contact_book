@@ -1,0 +1,23 @@
+@mixin size($px) {
+  width: #{$px};
+  height:#{$px};
+}
+
+.iconBtn {
+  padding: .25em .25em;
+  border: 0;
+  border-radius: .375rem;
+  opacity: 0.5;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  @include size(24px);
+
+  &:hover {
+    opacity: 1;
+    background-color: #0000000D;
+  }
+}
+
+.btn-close {
+  background: url(../../assets/images/svg/close-btn.svg) center center no-repeat;
+}

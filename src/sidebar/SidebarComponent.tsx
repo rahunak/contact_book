@@ -1,7 +1,7 @@
 import React from 'react';
 import AddContactForm from '../addContactForm/AddContactForm';
 import './sidebar.scss';
-import CloseBtn from '../components/CloseBtn/CloseBtn';
+import IconBtn from '../components/IconBtn/IconBtn';
 
 interface SidebarComponentProps {
   showedSlider: boolean;
@@ -9,13 +9,13 @@ interface SidebarComponentProps {
 }
 
 const SidebarComponent: React.FC<SidebarComponentProps> = ({ showedSlider, setShowedSlider }) => {
-  let sidebarTitle = 'Добавление контакта';
+  let sidebarTitle = 'Add contact';
 
   return (
-    <aside className={ showedSlider? 'sidebar open': 'sidebar closed' } >
+    <aside className={showedSlider ? 'sidebar open' : 'sidebar closed'} >
       <div className="sidebar-header">
         <h5 className="sidebar-title" >{sidebarTitle}</h5>
-        <CloseBtn onClick={() => setShowedSlider(!showedSlider)} />
+        <IconBtn type='close' onClick={() => setShowedSlider(!showedSlider)} />
       </div>
       <AddContactForm />
     </aside >

@@ -1,10 +1,15 @@
 import React, { MouseEventHandler } from 'react';
 import './button.scss';
-
-function Button(props: { text: string, theme: string, onClick: MouseEventHandler<HTMLButtonElement> }) {
-  let { text, theme, onClick } = props;
+interface MyButtonProps {
+  text: string;
+  type: "button" | "submit" | "reset";
+  theme: string;
+  disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+const Button: React.FC<MyButtonProps> = ({ text, type, theme, disabled = false, onClick }) => {
   return (
-    <button className={theme + ' button'} onClick={onClick}>{text}</button>
+    <button className={theme + ' button'} disabled={disabled} type={type} onClick={onClick}>{text}</button>
   );
 }
 

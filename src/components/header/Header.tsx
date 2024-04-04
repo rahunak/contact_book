@@ -18,8 +18,8 @@ const Header: React.FC<ChildComponentProps> = ({ showedSlider, setShowedSlider }
         </span>
       </p>
       <div >
-        <Button text='Add contact +' theme="red" onClick={() => setShowedSlider(!showedSlider)} />
-        <Button text='Groups' theme="blue" onClick={() => alert('aaaaaaaaaaa')} />
+        <Button type="button" text='Add contact +' theme="red" onClick={() => setShowedSlider(!showedSlider)} />
+        <Button type="button" text='Groups' theme="blue" onClick={() => alert('aaaaaaaaaaa')} />
       </div>
     </header >
   );

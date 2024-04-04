@@ -1,20 +1,29 @@
-import React from 'react';
-import DbStorage from '../store/store';
+import React, { useContext } from 'react';
+import { DbStorage, IState } from '../store/store';
 import ContactComponent from '../contact/ContactComponent';
 import IGroup from './IGroup';
+import { Store } from '../App';
 
 const GroupComponent: React.FC<IGroup> = (props) => {
-  let { contactStorage } = DbStorage;
-  return (
-    <div className="GroupComponent--wrapper">
-      {contactStorage.map(contact =>
-        <React.Fragment key={contact.id}>
-          <ContactComponent {...contact} />
-        </React.Fragment>
-      )}
+  const store = useContext(Store);
+  console.log("props", props);
+  const { id, name, contactsIds } = props;
 
-    </div>
-  );
+  if (!store) {
+    throw new Error('AddContactForm must be used within a StoreProvider');
+  }
+  const { records, dispatch } = store;
+  const contacts = records.contacts;
+  console.log("records", records);
+  console.log("contactsIds", contactsIds);
+  // console.log("contactsIds", contactsIds);
+  return (<div key={id} className="GroupComponent--wrapper">
+    <h3>Имя группы: {name}</h3>
+    {
+      contacts && contactsIds && contactsIds.map(contactId => <div key={contactId} className={`contactId-${contactId}`} > {contactId} </div>)
+    }
+
+  </div >);
 }
 
 export default GroupComponent;

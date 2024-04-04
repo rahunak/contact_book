@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { validate as isValidUUID } from 'uuid';
 import IContact from './IContact';
 
 
