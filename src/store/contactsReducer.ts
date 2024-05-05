@@ -1,5 +1,5 @@
 import IContact from "../contact/IContact";
-import { IState, DbStorage } from "../store/store";
+import { IState } from "../store/store";
 import { Dispatch } from 'react';
 
 export const ADD_CONTACT = "ADD_CONTACT";
@@ -11,17 +11,17 @@ export interface StoreContextType {
   dispatch: Dispatch<ActionType>;
 }
 
-interface AddContactAction {
+export interface AddContactAction {
   type: typeof ADD_CONTACT;
   payload: IContact;
 }
 
-interface UpdateContactAction {
+export interface UpdateContactAction {
   type: typeof UPDATE_CONTACT;
   payload: IContact;
 }
 
-interface RemoveContactAction {
+export interface RemoveContactAction {
   type: typeof REMOVE_CONTACT;
   payload: { id: string };
 }
@@ -29,12 +29,12 @@ export let initialState: IState = { contacts: new Map<string, IContact>(), group
 
 export type ActionType = AddContactAction | UpdateContactAction | RemoveContactAction;
 
-export const contactsReducer = (state: IState = DbStorage, data: ActionType) => {
+export const contactsReducer = (state: IState = initialState, data: ActionType) => {
   switch (data.type) {
     case ADD_CONTACT: {
       let newContacts = new Map(state.contacts || []);
       newContacts.set(data.payload.id, data.payload);
-      let newState = { ...state, newContacts };
+      let newState = { ...state, contacts: newContacts };
       saveState(newState);
       return newState;
     }
@@ -50,9 +50,6 @@ export const contactsReducer = (state: IState = DbStorage, data: ActionType) => 
       return newState;
     }
     case REMOVE_CONTACT: {
-      if (!state.contacts?.has(data.payload.id)) {
-        return;
-      }
       let updatedContacts = state.contacts.delete(data.payload.id);
       if (!updatedContacts) {
         console.error('You tried remove non existing contact', data.payload);
@@ -64,17 +61,20 @@ export const contactsReducer = (state: IState = DbStorage, data: ActionType) => 
       return newState;
     }
     default:
-      console.log("default", state)
-      return state || DbStorage;
+      return state || initialState;
   }
 }
 
 const saveState = (state: IState) => {
   try {
-    const serializedState = JSON.stringify(state);
+    const stateToSerialize = {
+      ...state,
+      contacts: Array.from(state.contacts.entries())
+    };
+    const serializedState = JSON.stringify(stateToSerialize);
     localStorage.setItem('state', serializedState);
-  } catch {
-    console.error('Could not save state');
+  } catch (e) {
+    console.error('Could not save state', e);
   }
 }
 
@@ -82,13 +82,26 @@ export function loadState(): IState {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
-      return initialState;
+      return {
+        ...initialState,
+        contacts: new Map<string, IContact>()
+      };
     }
 
-    const state = JSON.parse(serializedState) as IState;
-    return state;
-  } catch (e) {
+    const deserializedObject = JSON.parse(serializedState);
+    const contactsMap = Array.isArray(deserializedObject.contacts)
+      ? new Map<string, IContact>(deserializedObject.contacts)
+      : new Map<string, IContact>();
 
-    return initialState;
+    return {
+      ...deserializedObject,
+      contacts: contactsMap
+    };
+  } catch (e) {
+    console.error("Caught error", e);
+    return {
+      ...initialState,
+      contacts: new Map<string, IContact>()
+    };
   }
 }

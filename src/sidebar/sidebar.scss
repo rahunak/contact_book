@@ -1,3 +1,37 @@
+.sidebar--wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  &:is(.open) {
+    transform: translateX(0);
+
+    &~.page--wrapper {
+      filter: blur(4px);
+    }
+  }
+
+  &:is(.closed) {
+    transform: translateX(-100%);
+    transition: all ease-in 150ms;
+
+    &~.page--wrapper {
+      filter: none;
+    }
+  }
+
+  .sidebar {
+    &:is(.open) {
+      transform: translateX(0);
+      transition: all ease-in 150ms;
+    }
+  }
+
+}
+
 .sidebar {
   position: absolute;
   background-color: #ffffff;
@@ -7,6 +41,7 @@
   display: flex;
   flex-direction: column;
   transition: all ease-in 300ms;
+  z-index: 2;
 
   &:is(.open) {
     transform: translateX(0);

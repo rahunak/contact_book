@@ -1,0 +1,15 @@
+@import '../style/abstract/media';
+
+.page--wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.accordions--wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}

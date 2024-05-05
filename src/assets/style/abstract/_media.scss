@@ -1,0 +1,21 @@
+@media screen and (max-width:650px) {
+  html .header {
+    padding: 0 5vw;
+  }
+}
+
+@media screen and (max-width:440px) {
+  html {
+    .header {
+      padding: 5vw;
+      flex-direction: column;
+      gap: 5vw;
+      margin-bottom: 5vw;
+    }
+
+    .contact--wrapper {
+      padding: 8px;
+    }
+  }
+
+}

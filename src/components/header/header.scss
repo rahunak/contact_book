@@ -1,20 +1,36 @@
 @import '../../assets/style/base/base';
+@import '../../assets/style/base/typography';
+@import '../../assets/style/abstract/colors';
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  min-height: 70px;
   background-color: #FFFFFF;
   @extend .container;
+  width: 100%;
+  margin-bottom: 56px;
 }
 
 .logo--text {
-  color: #005BFE;
+  color: $blue;
   font-family: Arial;
   font-size: 18px;
   font-weight: 700;
   line-height: 22px;
   letter-spacing: 0em;
-  text-align: left;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.logo--wrapper {
+  margin: 0 calc(1rem / 2);
+
+}
+
+.actions {
+  display: flex;
 }

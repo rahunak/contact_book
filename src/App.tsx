@@ -1,40 +1,65 @@
-import React, { useState, createContext, useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import './App.css';
 import './normalize.css';
-
+import './assets/style/global.scss';
 import Header from './components/header/Header';
 import GroupComponent from './group/GroupComponent';
 import SidebarComponent from './sidebar/SidebarComponent';
-import { contactsReducer, ActionType, loadState, initialState, StoreContextType } from './store/contactsReducer';
-import { DbStorage, IState } from './store/store';
-import IContact from './contact/IContact';
+import { contactsReducer, loadState, initialState } from './store/contactsReducer';
+import ContactComponent from './contact/ContactComponent';
+import { StoreContext } from './store/store';
+import { ShowedSidebarContext } from './sidebar/SidebarComponent';
+import Accordion from './components/Accordion/Accordion';
 
-export const Store = createContext<StoreContextType | null>(null);
-const ShowedSidebar = createContext(false);
 function App() {
-  const [showedSlider, setShowedSlider] = useState(false);
-
+  const [showedSlider, setShowedSlider] = React.useState<boolean>(false);
   const [records, dispatch] = useReducer(contactsReducer, loadState());
+  const [typeAddForm, setAddForm] = useState('contacts');
+  console.log("App records", records);
 
   return (
-    <ShowedSidebar.Provider value={showedSlider}>
-      <Store.Provider value={{ records: records || initialState, dispatch }}>
+    <ShowedSidebarContext.Provider value={{ showedSlider, setShowedSlider }}>
+      <StoreContext.Provider value={{ records: records || initialState, dispatch }}>
         <div className="App  ">
           <div className="app--wrapper bg-gray">
             <SidebarComponent showedSlider={showedSlider} setShowedSlider={setShowedSlider} />
             <div className="page--wrapper">
-              <Header showedSlider={showedSlider} setShowedSlider={setShowedSlider} />
+              <Header setAddForm={setAddForm} />
               {
-                // records.groups && records.groups.map(group => {
-                //   return <GroupComponent key={group.id} id={group.id} name={group.name} contactsIds={group.contactsIds} />
-                // })
+                records && records.groups && records.groups.map(group => {
+                  return <GroupComponent key={group.id} id={group.id} name={group.name} contacts={group.contacts} />
+                })
               }
+              <div className="accordions--wrapper">
+              <Accordion title="Контакты">
+                {
+                  records && Array.from(records.contacts.values()).map(contact => {
+                    return <ContactComponent
+                      key={contact.id}
+                      contact={contact}
+                      dispatch={dispatch}
+                    />
+                  })
+                }
+              </Accordion>              <Accordion title="Контакты">
+                {
+                  records && Array.from(records.contacts.values()).map(contact => {
+                    return <ContactComponent
+                      key={contact.id}
+                      contact={contact}
+                      dispatch={dispatch}
+                    />
+                  })
+                }
+              </Accordion>
+              </div>
+
 
             </div>
           </div>
         </div>
-      </Store.Provider>
-    </ShowedSidebar.Provider>
+      </StoreContext.Provider>
+    </ShowedSidebarContext.Provider>
   );
 }
 

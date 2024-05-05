@@ -1,7 +1,7 @@
-import IContact from "../contact/IContact";
+import IContact from '../contact/IContact';
 
 export default interface IGroup {
   id: string;
   name: string,
-  contactsIds?: string[] | null,
+  contacts?: string[] | null,
 }

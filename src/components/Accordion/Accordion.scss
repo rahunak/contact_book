@@ -1,0 +1,20 @@
+@import '../../assets/style/abstract/colors';
+@import '../../assets/style/abstract/variables';
+@import '../../assets/style/base/typography';
+
+.accordion {
+  width: $contact-width;
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 20px 0px #0000000D;
+}
+
+.accordion-title {
+  @include title;
+  color: $blue;
+  background-color: transparent;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+
+}

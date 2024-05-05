@@ -3,10 +3,10 @@ import Button from '../components/button/Button';
 import './formStyle.scss';
 import { v4 as uuidv4 } from 'uuid';
 import { ADD_CONTACT } from '../store/contactsReducer';
-import { Store } from '../App';
+import { StoreContext } from '../store/store';
 
 function AddContactForm() {
-  const store = useContext(Store);
+  const store = useContext(StoreContext);
   if (!store) {
     throw new Error('AddContactForm must be used within a StoreProvider');
   }
@@ -27,7 +27,7 @@ function AddContactForm() {
 
   return (
     <div className="sidebar-body">
-      <form className="add-contact-form" id={'add_contact_form-' + uuidv4()} onSubmit={handleSubmit}>
+      <form className="add-contact-form" id='add_contact_form' onSubmit={handleSubmit}>
         <div>
           <div className="input--wrapper">
             <input
@@ -54,7 +54,7 @@ function AddContactForm() {
               name="group"
               className="select"
             >
-              <option value="" disabled  >Chose group</option>
+              <option value="" disabled >Chose group</option>
             </select>
           </div>
         </div>
